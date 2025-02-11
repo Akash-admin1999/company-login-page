@@ -52,35 +52,45 @@
     </div>
 
     <script>
-        const API_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"; // Replace with your Web App URL
+        const API_URL = "https://script.google.com/macros/s/AKfycbzt7_LlzAEipmM-VC6-5D2-8Rwv8a8O4-ljwkutKNB5DDFFQO8Aksh4TV2nxIBdqtks-Q/exec";
 
-        async function login() {
-            let email = document.getElementById("email").value;
-            let password = document.getElementById("password").value;
-            let errorMessage = document.getElementById("error");
+async function login() {
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+    let errorMessage = document.getElementById("error");
 
-            if (!email || !password) {
-                errorMessage.innerText = "Please enter both email and password.";
-                return;
+    if (!email || !password) {
+        errorMessage.innerText = "Please enter both email and password.";
+        return;
+    }
+
+    try {
+        let response = await fetch(API_URL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
             }
+        });
 
-            try {
-                let response = await fetch(API_URL + "?action=getUserData");
-                let users = await response.json();
-
-                let foundUser = users.find(user => user[0] === email && user[1] === password);
-
-                if (foundUser) {
-                    errorMessage.innerText = "Login Successful! Redirecting...";
-                    window.location.href = "https://sites.google.com/akashwarehouse.com/akashstorage-checker/home"; // Replace with your Google Sites URL
-                } else {
-                    errorMessage.innerText = "Invalid email or password.";
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                errorMessage.innerText = "Error connecting to server.";
-            }
+        if (!response.ok) {
+            throw new Error("Server response was not OK");
         }
+
+        let users = await response.json();
+        let foundUser = users.find(user => user[0] === email && user[1] === password);
+
+        if (foundUser) {
+            errorMessage.innerText = "Login Successful! Redirecting...";
+            window.location.href = "https://sites.google.com/akashwarehouse.com/akashstorage-checker/home";
+        } else {
+            errorMessage.innerText = "Invalid email or password.";
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        errorMessage.innerText = "Error connecting to server.";
+    }
+}
+
     </script>
 
 </body>
