@@ -52,7 +52,7 @@
     </div>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbzt7_LlzAEipmM-VC6-5D2-8Rwv8a8O4-ljwkutKNB5DDFFQO8Aksh4TV2nxIBdqtks-Q/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbzt7_LlzAEipmM-VC6-5D2-8Rwv8a8O4-ljwkutKNB5DDFFQO8Aksh4TV2nxIBdqtks-Q/exec"; // Replace with the new Web App URL
 
 async function login() {
     let email = document.getElementById("email").value;
@@ -77,11 +77,13 @@ async function login() {
         }
 
         let users = await response.json();
-        let foundUser = users.find(user => user[0] === email && user[1] === password);
+
+        // ✅ Correcting the array structure (emails in A2:A, passwords in B2:B)
+        let foundUser = users.find(user => user[0].trim() === email.trim() && user[1].trim() === password.trim());
 
         if (foundUser) {
             errorMessage.innerText = "Login Successful! Redirecting...";
-            window.location.href = "https://sites.google.com/akashwarehouse.com/akashstorage-checker/home";
+            window.location.href = "https://sites.google.com/akashwarehouse.com/akashstorage-checker/home"; // Replace with your Google Sites URL
         } else {
             errorMessage.innerText = "Invalid email or password.";
         }
@@ -90,7 +92,6 @@ async function login() {
         errorMessage.innerText = "Error connecting to server.";
     }
 }
-
     </script>
 
 </body>
